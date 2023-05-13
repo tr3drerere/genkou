@@ -39,14 +39,21 @@ if __name__ == '__main__':
         dst = trim_center(img, width, height)
         #　カラーモード変換
         gray = cv2.cvtColor(dst, cv2.COLOR_BGR2GRAY)
-        #　ノンブル入力
+
+        ###ノンブル入力
         posW = 120
         posH = height - 470
-
         #  ファイルのページ番号が奇数か偶数かで位置を変更
         if i % 2 == 0:
             posW = width - 120
-        cv2.putText(gray, str(i+1), (posW, posH), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
+        #  座標の色によって、文字の色を変更し入力
+        pil_image = Image.fromarray(gray)
+        color = pil_image.getpixel((posW, posH))
+        if color > 125:
+           cv2.putText(gray, str(i+1), (posW, posH), cv2.FONT_HERSHEY_TRIPLEX, 2, (0, 0, 0), 2, cv2.LINE_AA)
+        else:
+            cv2.putText(gray, str(i+1), (posW, posH), cv2.FONT_HERSHEY_TRIPLEX, 2, (255, 255, 255), 2, cv2.LINE_AA)    
+
 
         #  ファイル名成形
         dirname = 'convert_' + now
